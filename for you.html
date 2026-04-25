@@ -1,0 +1,1369 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioFlash — Belajar Biologi Murni</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c1117;
+    --surface: #141b24;
+    --surface2: #1c2735;
+    --border: rgba(255,255,255,0.07);
+    --border-strong: rgba(255,255,255,0.15);
+    --accent: #5eead4;
+    --accent2: #a78bfa;
+    --correct: #4ade80;
+    --wrong: #f87171;
+    --text: #e2e8f0;
+    --text-muted: #64748b;
+    --text-dim: #334155;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Source Sans 3', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px 48px;
+    background-image:
+      radial-gradient(ellipse 60% 40% at 20% 10%, rgba(94,234,212,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 30% at 80% 90%, rgba(167,139,250,0.04) 0%, transparent 60%);
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    width: 100%;
+    max-width: 520px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 0 0 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 28px;
+  }
+  .logo {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-style: italic;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+  .logo span { color: var(--accent); font-style: normal; }
+  .session-info {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* ── PROGRESS ── */
+  .progress-wrap {
+    width: 100%;
+    max-width: 520px;
+    margin-bottom: 20px;
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .progress-track {
+    height: 2px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* ── CHAPTER TAG ── */
+  .chapter-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border: 1px solid rgba(94,234,212,0.25);
+    border-radius: 4px;
+    padding: 3px 8px;
+    margin-bottom: 14px;
+  }
+  .chapter-tag.purple { color: var(--accent2); border-color: rgba(167,139,250,0.25); }
+  .chapter-tag.amber { color: #fbbf24; border-color: rgba(251,191,36,0.25); }
+  .chapter-tag.rose { color: #fb7185; border-color: rgba(251,113,133,0.25); }
+  .chapter-tag.sky { color: #38bdf8; border-color: rgba(56,189,248,0.25); }
+
+  /* ── MAIN CARD ── */
+  .main-card {
+    width: 100%;
+    max-width: 520px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 28px 24px;
+    margin-bottom: 16px;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .main-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(94,234,212,0.3), transparent);
+  }
+  .card-number {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+  .question-text {
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .latin-name {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 8px;
+  }
+
+  /* ── OPTIONS ── */
+  .options-wrap {
+    width: 100%;
+    max-width: 520px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .opt-btn {
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    color: var(--text);
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-family: var(--sans);
+    font-size: 14.5px;
+    font-weight: 400;
+    line-height: 1.45;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .opt-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(94,234,212,0.04);
+  }
+  .opt-btn:active:not(:disabled) { transform: scale(0.99); }
+  .opt-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    margin-top: 1px;
+    min-width: 18px;
+  }
+  .opt-btn.correct {
+    border-color: var(--correct);
+    background: rgba(74,222,128,0.08);
+  }
+  .opt-btn.correct .opt-label { color: var(--correct); }
+  .opt-btn.wrong {
+    border-color: var(--wrong);
+    background: rgba(248,113,113,0.08);
+  }
+  .opt-btn.wrong .opt-label { color: var(--wrong); }
+  .opt-btn:disabled { cursor: default; }
+
+  /* ── FEEDBACK / PENJELASAN ── */
+  .feedback-card {
+    width: 100%;
+    max-width: 520px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+    display: none;
+    animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .feedback-status {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .feedback-status.ok { color: var(--correct); }
+  .feedback-status.err { color: var(--wrong); }
+  .feedback-explanation {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #94a3b8;
+  }
+  .feedback-explanation strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .feedback-explanation em {
+    color: var(--accent);
+    font-style: italic;
+  }
+  .feedback-ref {
+    margin-top: 10px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+  .retry-note {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .retry-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--wrong);
+    flex-shrink: 0;
+  }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    width: 100%;
+    max-width: 520px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .stat-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 10px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text);
+    display: block;
+  }
+  .stat-num.green { color: var(--correct); }
+  .stat-num.red { color: var(--wrong); }
+  .stat-lbl {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    display: block;
+    margin-top: 3px;
+  }
+
+  /* ── RESULT SCREEN ── */
+  #result-screen {
+    display: none;
+    width: 100%;
+    max-width: 520px;
+    animation: slideUp 0.3s ease;
+  }
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 28px;
+    text-align: center;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .result-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(94,234,212,0.4), transparent);
+  }
+  .result-grade {
+    font-family: var(--mono);
+    font-size: 52px;
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .result-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+  .result-sub {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 360px;
+    margin: 0 auto 20px;
+  }
+  .result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .pills-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .pill {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .pill.ok { border-color: rgba(74,222,128,0.3); color: var(--correct); background: rgba(74,222,128,0.06); }
+  .pill.err { border-color: rgba(248,113,113,0.3); color: var(--wrong); background: rgba(248,113,113,0.06); }
+  .action-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 10px;
+  }
+  .action-primary {
+    background: var(--accent);
+    color: #0c1117;
+    border: none;
+  }
+  .action-primary:hover { filter: brightness(1.1); }
+  .action-secondary {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-strong);
+  }
+  .action-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    margin-top: 32px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    text-align: center;
+  }
+
+  h45 {
+    font-size: 11px;
+        font-family: var(--mono);
+    font-style: italic;   
+     text-align: center;
+    color: rgb(92, 146, 169)
+
+  }
+
+  h23 {
+    font-size:9px ; 
+    color: #334256;
+        text-align: center;
+    font-family: var(--mono);
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo">Bio<span>Flash</span></div>
+  <h45>-For Windy-</h45>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button id="music-btn" onclick="toggleMusic()" title="Musik background" style="background:transparent;border:1px solid var(--border-strong);color:var(--text-muted);border-radius:6px;padding:4px 10px;cursor:pointer;font-family:var(--mono);font-size:10px;letter-spacing:1px;">♪ MUSIK</button>
+    <button id="mute-btn" onclick="toggleMute()" title="Mute efek suara" style="background:transparent;border:1px solid var(--border-strong);color:var(--text-muted);border-radius:6px;padding:4px 10px;cursor:pointer;font-family:var(--mono);font-size:10px;letter-spacing:1px;">🔊 SFX</button>
+  </div>
+</header>
+
+<!-- GAME UI -->
+<div id="game-ui" style="width:100%;max-width:520px;display:flex;flex-direction:column;align-items:center;">
+
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span id="prog-label">Kartu tersisa: --</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+  </div>
+
+  <div class="main-card" style="align-self:stretch;">
+    <div id="chapter-tag" class="chapter-tag">BAB I · SEL</div>
+    <div class="card-number" id="card-number">Kartu #001</div>
+    <div class="question-text" id="question-text">Memuat pertanyaan...</div>
+    <div class="latin-name" id="latin-name"></div>
+  </div>
+
+  <div class="options-wrap" style="align-self:stretch;">
+    <button class="opt-btn" id="optA" onclick="handleChoice('A')" disabled>
+      <span class="opt-label">A</span><span id="textA"></span>
+    </button>
+    <button class="opt-btn" id="optB" onclick="handleChoice('B')" disabled>
+      <span class="opt-label">B</span><span id="textB"></span>
+    </button>
+  </div>
+
+  <div class="feedback-card" id="feedback-card" style="align-self:stretch;">
+    <div class="feedback-status" id="fb-status">BENAR!</div>
+    <div class="feedback-explanation" id="fb-explanation"></div>
+    <div class="feedback-ref" id="fb-ref"></div>
+    <div class="retry-note" id="fb-retry" style="display:none;">
+      <span class="retry-dot"></span>
+      <span>Kartu ini akan muncul lagi — ulangi sampai hafal.</span>
+    </div>
+    <button id="next-btn" onclick="goNext()" style="display:none;margin-top:16px;width:100%;padding:12px;border-radius:8px;background:var(--accent);color:#0c1117;border:none;font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;">Lanjut ke kartu berikutnya &rarr;</button>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-box">
+      <span class="stat-num green" id="sc-benar">0</span>
+      <span class="stat-lbl">Benar</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num red" id="sc-salah">0</span>
+      <span class="stat-lbl">Salah</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num" id="sc-sisa">--</span>
+      <span class="stat-lbl">Tersisa</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="result-screen">
+  <div class="result-card">
+    <div class="result-grade" id="res-grade" style="color:#4ade80;">A</div>
+    <div class="result-title" id="res-title">Sesi Selesai!</div>
+    <div class="result-sub" id="res-sub">Semua kartu berhasil dikuasai.</div>
+    <div class="result-grid">
+      <div class="stat-box"><span class="stat-num green" id="res-benar">0</span><span class="stat-lbl">Benar</span></div>
+      <div class="stat-box"><span class="stat-num red" id="res-salah">0</span><span class="stat-lbl">Salah</span></div>
+      <div class="stat-box"><span class="stat-num" id="res-akurasi">0%</span><span class="stat-lbl">Akurasi</span></div>
+    </div>
+    <div class="pills-wrap" id="pills-wrap"></div>
+  </div>
+  <button class="action-btn action-primary" onclick="restartGame()">Mulai Sesi Baru</button>
+  <button class="action-btn action-secondary" onclick="restartWrong()">Ulangi Yang Salah Saja</button>
+</div>
+
+<footer class="site-footer">BIOFLASH · SISTEM KARTU SPACED REPETITION</footer>
+<h23>-BY DELONYX-</h23>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  DATABASE MATERI — BIOLOGI MURNI S1
+//  Format: { question, A, B, correct, explanation, latin, chapter, chapterClass, ref }
+// ═══════════════════════════════════════════════════════
+const DATABASE = [
+
+  // ── BAB 1: BIOLOGI SEL ──────────────────────────────
+  {
+    chapter: "BAB I · Biologi Sel",
+    chapterClass: "",
+    question: "Organel yang berperan sebagai 'dapur energi' sel, menghasilkan ATP melalui respirasi seluler aerob adalah...",
+    A: "Mitokondria",
+    B: "Kloroplas",
+    correct: "A",
+    explanation: "<strong>Mitokondria</strong> menghasilkan ATP melalui dua tahap utama: Siklus Krebs di matriks dan Rantai Transport Elektron di membran dalam. Produk bersih per glukosa: <em>±36–38 ATP</em>. Kloroplas adalah tempat fotosintesis, bukan respirasi aerob.",
+    latin: "",
+    ref: "Alberts et al., Molecular Biology of the Cell, Ch.14"
+  },
+  {
+    chapter: "BAB I · Biologi Sel",
+    chapterClass: "",
+    question: "Membran sel bersifat semipermeabel karena strukturnya berupa bilayer fosfolipid. Bagian yang bersifat hidrofobik adalah...",
+    A: "Ekor asam lemak (fatty acid tail)",
+    B: "Kepala fosfat (phosphate head)",
+    correct: "A",
+    explanation: "Fosfolipid memiliki <strong>kepala fosfat yang hidrofilik</strong> (suka air) menghadap ke luar, dan <strong>ekor asam lemak yang hidrofobik</strong> (takut air) saling berhadapan di tengah bilayer. Inilah yang menjadikan membran selektif permeabel terhadap molekul tertentu.",
+    latin: "",
+    ref: "Campbell, Biology, Ed.12, Ch.7"
+  },
+  {
+    chapter: "BAB I · Biologi Sel",
+    chapterClass: "",
+    question: "Proses masuknya air ke dalam sel melalui membran semipermeabel dari larutan yang hipotonik ke hipertonik disebut...",
+    A: "Osmosis",
+    B: "Difusi terfasilitasi",
+    correct: "A",
+    explanation: "<strong>Osmosis</strong> adalah perpindahan <em>pelarut (air)</em> dari larutan berkonsentrasi rendah (hipotonik) ke tinggi (hipertonik) melewati membran semipermeabel. Bedakan dengan difusi terfasilitasi yang memindahkan zat terlarut melalui protein kanal/protein pembawa.",
+    latin: "",
+    ref: "Sadava, Life, Ed.12, Ch.6"
+  },
+  {
+    chapter: "BAB I · Biologi Sel",
+    chapterClass: "",
+    question: "Lisosom mengandung enzim hidrolitik yang aktif di pH asam (~4.5). Organel yang 'memompa' H⁺ ke dalam lisosom untuk menjaga pH asam ini adalah...",
+    A: "Pompa proton (H⁺-ATPase) di membran lisosom",
+    B: "Ribosom yang menempel pada RE kasar",
+    correct: "A",
+    explanation: "<strong>Pompa proton (vacuolar H⁺-ATPase)</strong> secara aktif memompa ion H⁺ ke dalam lumen lisosom menggunakan energi ATP, sehingga pH di dalam lisosom turun menjadi ~4.5. Hal ini mengaktifkan enzim hidrolitik seperti protease, lipase, dan nuklease.",
+    latin: "",
+    ref: "Lodish et al., Molecular Cell Biology, Ed.9, Ch.14"
+  },
+
+  // ── BAB 2: GENETIKA ─────────────────────────────────
+  {
+    chapter: "BAB II · Genetika",
+    chapterClass: "purple",
+    question: "Hukum Mendel II (Independent Assortment) berlaku saat gen-gen terletak pada...",
+    A: "Kromosom yang berbeda (non-homolog)",
+    B: "Kromosom yang sama (pautan/linkage)",
+    correct: "A",
+    explanation: "<strong>Hukum Pemilahan Bebas (Law of Independent Assortment)</strong> menyatakan bahwa gen-gen yang terletak pada kromosom non-homolog akan dipisahkan secara bebas saat meiosis. Jika gen terletak pada kromosom yang sama (linked genes), keduanya cenderung diwariskan bersama dan menyimpang dari rasio Mendel.",
+    latin: "",
+    ref: "Griffiths, Introduction to Genetic Analysis, Ed.12, Ch.4"
+  },
+  {
+    chapter: "BAB II · Genetika",
+    chapterClass: "purple",
+    question: "Pada elektroforesis DNA, fragmen DNA bergerak menuju kutub positif (anoda) karena...",
+    A: "DNA bermuatan negatif akibat gugus fosfat",
+    B: "DNA bermuatan positif akibat gugus basa nitrogen",
+    correct: "A",
+    explanation: "<strong>Gugus fosfat (PO₄³⁻)</strong> pada tulang punggung DNA terionisasi pada pH fisiologis, memberikan muatan negatif keseluruhan pada molekul DNA. Karena itu, dalam medan listrik, DNA bermigrasi dari katoda (−) ke anoda (+). Fragmen lebih kecil bergerak lebih cepat melalui gel agarosa.",
+    latin: "",
+    ref: "Brown, Genome, Ed.3, Ch.2"
+  },
+  {
+    chapter: "BAB II · Genetika",
+    chapterClass: "purple",
+    question: "Mutasi frameshift terjadi apabila...",
+    A: "Ada insersi atau delesi nukleotida yang bukan kelipatan 3",
+    B: "Satu basa diganti dengan basa lain (mutasi titik)",
+    correct: "A",
+    explanation: "<strong>Frameshift mutation</strong> terjadi bila jumlah basa yang disisipkan (insersi) atau dihapus (delesi) bukan kelipatan 3, sehingga mengubah kerangka baca (reading frame) semua kodon di hilir titik mutasi. Dampaknya biasanya jauh lebih parah dibanding mutasi titik (missense/nonsense).",
+    latin: "",
+    ref: "Lewin's Genes XII, Ch.3"
+  },
+  {
+    chapter: "BAB II · Genetika",
+    chapterClass: "purple",
+    question: "Rasio fenotip F₂ pada persilangan dihibrid (AaBb × AaBb) dengan dominansi penuh adalah...",
+    A: "9 : 3 : 3 : 1",
+    B: "1 : 2 : 1 : 2 : 4 : 2 : 1 : 2 : 1",
+    correct: "A",
+    explanation: "Persilangan dihibrid menghasilkan <strong>9 A_B_ : 3 A_bb : 3 aaB_ : 1 aabb</strong> — total 16 kombinasi gamet. Rasio 9:3:3:1 ini merupakan bukti empiris Hukum Mendel II. Rasio 1:2:1:2:4:2:1:2:1 adalah genotip, bukan fenotip.",
+    latin: "",
+    ref: "Griffiths, Introduction to Genetic Analysis, Ed.12, Ch.2"
+  },
+
+  // ── BAB 3: FISIOLOGI TUMBUHAN ────────────────────────
+  {
+    chapter: "BAB III · Fisiologi Tumbuhan",
+    chapterClass: "amber",
+    question: "Stomata membuka saat sel penjaga (guard cells) mengalami turgiditas tinggi akibat masuknya ion K⁺. Mekanisme ini dipicu oleh...",
+    A: "Cahaya dan penurunan CO₂ di sel penjaga",
+    B: "Kegelapan dan peningkatan asam absisat (ABA)",
+    correct: "A",
+    explanation: "Cahaya mengaktifkan <strong>pompa H⁺-ATPase</strong> di membran sel penjaga, menghasilkan gradien elektrokimia yang mendorong masuknya <em>ion K⁺</em> melalui kanal K⁺. Masuknya K⁺ menurunkan potensial osmotik, sehingga air masuk secara osmosis → sel penjaga turgor → stomata terbuka. ABA justru memicu penutupan stomata saat kekeringan.",
+    latin: "",
+    ref: "Taiz & Zeiger, Plant Physiology, Ed.6, Ch.18"
+  },
+  {
+    chapter: "BAB III · Fisiologi Tumbuhan",
+    chapterClass: "amber",
+    question: "Hormon yang berperan dalam respons gravitropisme akar tumbuhan adalah...",
+    A: "Auksin (IAA)",
+    B: "Giberelin (GA)",
+    correct: "A",
+    explanation: "<strong>Auksin (IAA)</strong> bergerak ke sisi bawah akar akibat gravitasi (redistribusi lateral). Pada akar, konsentrasi auksin tinggi justru <em>menghambat</em> pertumbuhan, sehingga sisi bawah tumbuh lebih lambat → akar membengkok ke bawah (gravitropisme positif). Giberelin berperan dalam perpanjangan batang dan perkecambahan biji.",
+    latin: "Indole-3-acetic acid (IAA)",
+    ref: "Taiz & Zeiger, Plant Physiology, Ed.6, Ch.17"
+  },
+  {
+    chapter: "BAB III · Fisiologi Tumbuhan",
+    chapterClass: "amber",
+    question: "Tanaman C4 lebih efisien di lingkungan panas dan kering karena...",
+    A: "Memisahkan fiksasi CO₂ (mesofil) dan siklus Calvin (bundel selubung)",
+    B: "Stomata terbuka malam hari dan menutup siang hari (seperti tanaman CAM)",
+    correct: "A",
+    explanation: "<strong>Tanaman C4</strong> (jagung, tebu) menggunakan enzim <em>PEP karboksilase</em> di sel mesofil untuk memfiksasi CO₂ menjadi malat (C4). Malat diangkut ke sel bundle sheath tempat siklus Calvin berlangsung pada konsentrasi CO₂ tinggi. Ini meminimalkan <em>fotorespirasi</em> yang merugikan.",
+    latin: "",
+    ref: "Campbell, Biology, Ed.12, Ch.10"
+  },
+
+  // ── BAB 4: FISIOLOGI HEWAN ───────────────────────────
+  {
+    chapter: "BAB IV · Fisiologi Hewan",
+    chapterClass: "sky",
+    question: "Potensial aksi neuron terjadi karena...",
+    A: "Masuknya Na⁺ secara cepat melalui kanal Na⁺ yang terbuka tegangan",
+    B: "Keluarnya K⁺ secara cepat yang mendepolarisasi membran",
+    correct: "A",
+    explanation: "Saat membran terdepolarisasi melewati ambang batas (~−55 mV), <strong>kanal Na⁺ berpintu voltase</strong> terbuka masif → Na⁺ masuk → potensial membran naik cepat ke ~+30 mV (fase naik). Kemudian kanal K⁺ terbuka → K⁺ keluar → repolarisasi. Keluarnya K⁺ adalah fase <em>repolarisasi</em>, bukan depolarisasi.",
+    latin: "",
+    ref: "Silverthorn, Human Physiology, Ed.8, Ch.8"
+  },
+  {
+    chapter: "BAB IV · Fisiologi Hewan",
+    chapterClass: "sky",
+    question: "Molekul yang berfungsi sebagai 'pembawa elektron' utama dalam rantai transport elektron mitokondria adalah...",
+    A: "NADH dan FADH₂",
+    B: "ATP dan ADP",
+    correct: "A",
+    explanation: "<strong>NADH</strong> (mengandung 2e⁻ berenergi tinggi) dan <strong>FADH₂</strong> menyumbangkan elektron ke kompleks protein di membran dalam mitokondria. Energi yang dilepas saat elektron bergerak menuju O₂ digunakan untuk memompa H⁺ → menghasilkan <em>gradien proton</em> → ATP sintase menghasilkan ATP (kemiosmosis). ATP adalah produk, bukan pembawa elektron.",
+    latin: "",
+    ref: "Sadava, Life, Ed.12, Ch.9"
+  },
+  {
+    chapter: "BAB IV · Fisiologi Hewan",
+    chapterClass: "sky",
+    question: "Prinsip dasar imunitas adaptif yang memungkinkan respons lebih cepat pada paparan antigen kedua adalah...",
+    A: "Sel memori (memory B dan T cells) yang bertahan lama setelah respons pertama",
+    B: "Produksi antibodi poliklonal oleh semua limfosit secara bersamaan",
+    correct: "A",
+    explanation: "Setelah respons imun primer, sebagian sel B dan T berdiferensiasi menjadi <strong>sel memori berumur panjang</strong>. Saat antigen yang sama masuk kembali, sel memori merespons lebih cepat dan kuat (<em>respons sekunder</em>) — prinsip ini menjadi dasar imunisasi (vaksinasi). Antibodi poliklonal diproduksi tapi bukan mekanisme memori.",
+    latin: "",
+    ref: "Abbas, Cellular and Molecular Immunology, Ed.10, Ch.1"
+  },
+
+  // ── BAB 5: EKOLOGI ───────────────────────────────────
+  {
+    chapter: "BAB V · Ekologi",
+    chapterClass: "rose",
+    question: "Konsep 'ecological niche' (relung ekologi) paling tepat didefinisikan sebagai...",
+    A: "Peran fungsional suatu spesies beserta semua kondisi lingkungan yang diperlukan untuk bertahan hidup",
+    B: "Tempat fisik (habitat) di mana suatu spesies hidup",
+    correct: "A",
+    explanation: "<strong>Relung ekologi (niche)</strong> mencakup bukan hanya habitat fisik, tetapi juga <em>peran fungsional</em>: apa yang dimakan, siapa pemangsanya, bagaimana interaksinya dengan spesies lain, dan rentang toleransi terhadap faktor abiotik (suhu, pH, dsb). Konsep ini diperkenalkan oleh G.E. Hutchinson sebagai 'hypervolume n-dimensi'.",
+    latin: "",
+    ref: "Ricklefs, The Economy of Nature, Ed.7, Ch.6"
+  },
+  {
+    chapter: "BAB V · Ekologi",
+    chapterClass: "rose",
+    question: "Jenis interaksi di mana satu spesies diuntungkan sementara spesies lain tidak terpengaruh (0) disebut...",
+    A: "Komensalisme (+/0)",
+    B: "Mutualisme (+/+)",
+    correct: "A",
+    explanation: "<strong>Komensalisme</strong> (+/0): satu spesies untung, yang lain netral. Contoh: ikan remora pada hiu — remora mendapat sisa makanan, hiu tidak dirugikan maupun diuntungkan. Berbeda dengan mutualisme (+/+) di mana keduanya untung, seperti lebah dan bunga.",
+    latin: "",
+    ref: "Smith & Smith, Elements of Ecology, Ed.9, Ch.14"
+  },
+  {
+    chapter: "BAB V · Ekologi",
+    chapterClass: "rose",
+    question: "Dalam suksesi ekologi, komunitas yang stabil dan 'akhir' dari proses suksesi disebut...",
+    A: "Komunitas klimaks (climax community)",
+    B: "Komunitas perintis (pioneer community)",
+    correct: "A",
+    explanation: "<strong>Komunitas klimaks</strong> adalah tahap akhir suksesi di mana komposisi spesies relatif stabil dan berada dalam keseimbangan dengan kondisi abiotik setempat. <em>Komunitas perintis</em> adalah yang pertama mengkolonisasi habitat baru (misal: lumut kerak di batuan vulkanik baru — suksesi primer).",
+    latin: "",
+    ref: "Begon et al., Ecology, Ed.4, Ch.16"
+  },
+
+  // ── BAB 6: BIOKIMIA ──────────────────────────────────
+  {
+    chapter: "BAB VI · Biokimia",
+    chapterClass: "",
+    question: "Situs aktif enzim bersifat spesifik terhadap substrat tertentu. Model yang lebih akurat menggambarkan kelenturan situs aktif saat substrat masuk adalah...",
+    A: "Model Induced Fit (kecocokan terinduksi)",
+    B: "Model Lock and Key (kunci dan gembok)",
+    correct: "A",
+    explanation: "<strong>Model Induced Fit</strong> (Koshland, 1958) menggambarkan bahwa situs aktif enzim <em>berubah bentuk</em> saat substrat masuk untuk mencapai kecocokan optimal — lebih akurat secara molekuler. Model Lock-and-Key (Fischer, 1894) menganggap bentuk situs aktif sudah tetap dan kaku, yang kini dianggap oversimplifikasi.",
+    latin: "",
+    ref: "Berg, Biochemistry, Ed.8, Ch.8"
+  },
+  {
+    chapter: "BAB VI · Biokimia",
+    chapterClass: "",
+    question: "pH optimum enzim pepsin yang bekerja di lambung adalah sekitar...",
+    A: "pH 1.5 – 2 (sangat asam)",
+    B: "pH 7 – 8 (netral hingga sedikit basa)",
+    correct: "A",
+    explanation: "<strong>Pepsin</strong> adalah protease lambung yang memiliki pH optimum <em>1.5–2</em>, sesuai dengan lingkungan asam lambung akibat sekresi HCl. Enzim di lingkungan netral-basa (pH 7–8) contohnya adalah tripsin dan kimotripsin yang bekerja di usus halus.",
+    latin: "",
+    ref: "Berg, Biochemistry, Ed.8, Ch.8"
+  },
+
+  // ── BAB 7: EVOLUSI ───────────────────────────────────
+  {
+    chapter: "BAB VII · Evolusi",
+    chapterClass: "purple",
+    question: "Prinsip Hardy-Weinberg berlaku pada populasi yang memenuhi syarat tertentu. Manakah yang BUKAN syarat kesetimbangan Hardy-Weinberg?",
+    A: "Terjadi seleksi alam yang kuat terhadap alel tertentu",
+    B: "Ukuran populasi sangat besar (tidak terbatas)",
+    correct: "A",
+    explanation: "Kesetimbangan <strong>Hardy-Weinberg</strong> memerlukan: (1) populasi sangat besar, (2) perkawinan acak (random mating), (3) tidak ada mutasi, (4) tidak ada migrasi, dan (5) <em>tidak ada seleksi alam</em>. Seleksi alam adalah salah satu kekuatan yang mengubah frekuensi alel, sehingga melanggar kesetimbangan H-W.",
+    latin: "",
+    ref: "Futuyma, Evolution, Ed.4, Ch.6"
+  },
+  {
+    chapter: "BAB VII · Evolusi",
+    chapterClass: "purple",
+    question: "Spesiasi alopatrik terjadi ketika...",
+    A: "Populasi terpisah secara geografis, lalu berevolusi secara independen",
+    B: "Populasi baru terbentuk dalam area geografis yang sama dengan populasi induk",
+    correct: "A",
+    explanation: "<strong>Spesiasi alopatrik</strong> (allopatric speciation) adalah mekanisme spesiasi paling umum: populasi terpisah oleh <em>hambatan geografis</em> (gunung, lautan, sungai), kemudian berevolusi secara terpisah karena berbeda tekanan seleksi dan genetic drift hingga tidak dapat saling kawin lagi. Spesiasi dalam area geografis yang sama disebut spesiasi simpatrik.",
+    latin: "",
+    ref: "Futuyma, Evolution, Ed.4, Ch.17"
+  },
+
+  // ── BAB 8: BIOLOGI MOLEKULER ─────────────────────────
+  {
+    chapter: "BAB VIII · Biologi Molekuler",
+    chapterClass: "sky",
+    question: "Pada proses transkripsi, enzim yang mensintesis mRNA dari template DNA adalah...",
+    A: "RNA Polimerase",
+    B: "DNA Polimerase",
+    correct: "A",
+    explanation: "<strong>RNA Polimerase</strong> membaca untai template DNA (3'→5') dan mensintesis mRNA komplementer (5'→3') tanpa memerlukan primer. Pada prokariot: satu jenis RNA pol. Pada eukariot: RNA Pol I (rRNA), <em>RNA Pol II (mRNA)</em>, RNA Pol III (tRNA). DNA Polimerase hanya bekerja pada replikasi DNA.",
+    latin: "",
+    ref: "Alberts et al., Molecular Biology of the Cell, Ch.6"
+  },
+  {
+    chapter: "BAB VIII · Biologi Molekuler",
+    chapterClass: "sky",
+    question: "Teknik PCR (Polymerase Chain Reaction) menggunakan DNA Polimerase dari bakteri termofilik Thermus aquaticus. Alasan menggunakan enzim ini adalah...",
+    A: "Tahan suhu tinggi (~95°C) saat tahap denaturasi DNA",
+    B: "Bekerja optimal di suhu rendah untuk spesifisitas primer",
+    correct: "A",
+    explanation: "<strong>Taq Polymerase</strong> dari <em>Thermus aquaticus</em> memiliki stabilitas termal yang luar biasa: aktif bahkan setelah dipanaskan hingga 95°C berulang kali (tahap denaturasi PCR). DNA polimerase biasa akan terdenaturasi (rusak) pada suhu tinggi. Ini merevolusi PCR karena enzim tidak perlu ditambahkan di tiap siklus.",
+    latin: "Thermus aquaticus",
+    ref: "Watson et al., Molecular Biology of the Gene, Ed.7, Ch.7"
+  },
+
+  // ── MIKROTEKNIK (BI3014) ─────────────────────────────
+  {
+    chapter: "Mikroteknik · BI3014",
+    chapterClass: "sky",
+    question: "Proses fiksasi jaringan dalam mikroteknik bertujuan untuk...",
+    A: "Menghentikan metabolisme sel dan mempertahankan struktur jaringan semirip aslinya",
+    B: "Membunuh bakteri kontaminan pada sampel jaringan",
+    correct: "A",
+    explanation: "<strong>Fiksasi</strong> adalah langkah pertama dan terpenting dalam mikroteknik. Fiksatif seperti <em>formalin 10%</em> atau glutaraldehida menyebabkan cross-linking protein, menghentikan autolisis enzimatik, dan mempertahankan morfologi sel/jaringan. Tanpa fiksasi, enzim lisosom akan merusak jaringan (autolisis).",
+    latin: "",
+    ref: "Kiernan, Histological & Histochemical Methods, Ed.4"
+  },
+  {
+    chapter: "Mikroteknik · BI3014",
+    chapterClass: "sky",
+    question: "Pewarnaan Hematoxylin & Eosin (H&E) menghasilkan warna ungu/biru pada inti sel karena...",
+    A: "Hematoxylin bersifat basa dan berikatan dengan DNA/RNA yang bermuatan negatif (asidofil)",
+    B: "Eosin bersifat asam dan berikatan dengan nukleoprotein di inti sel",
+    correct: "A",
+    explanation: "<strong>Hematoxylin</strong> (setelah mordanting) bermuatan positif (basa) → berikatan dengan <em>asam nukleat (DNA/RNA)</em> yang bermuatan negatif di inti → warna biru-ungu (basofilik). Eosin bermuatan negatif (asam) → berikatan dengan protein sitoplasma yang bermuatan positif → warna merah-oranye (eosinofilik).",
+    latin: "",
+    ref: "Ross & Pawlina, Histology: A Text and Atlas, Ed.8"
+  },
+
+  // ── EKOLOGI PERAIRAN (BI3023) ────────────────────────
+  {
+    chapter: "Ekologi Perairan · BI3023",
+    chapterClass: "rose",
+    question: "Parameter yang paling sering digunakan untuk mengukur kualitas air secara biologis adalah...",
+    A: "Indeks Keanekaragaman Shannon-Wiener (H') berdasarkan komunitas makroinvertebrata bentos",
+    B: "Suhu dan pH air saja sudah cukup untuk menilai kualitas biologis perairan",
+    correct: "A",
+    explanation: "<strong>Bioassessment</strong> menggunakan komunitas <em>makroinvertebrata bentos</em> (insekta, moluska, cacing) sangat sensitif terhadap pencemaran. Indeks Shannon-Wiener H' = −Σ(pi × ln pi) — nilai tinggi (>3) = perairan sehat, nilai rendah (<1) = tercemar berat. Pendekatan ini lebih komprehensif dibanding parameter fisik-kimia saja.",
+    latin: "",
+    ref: "Allan & Castillo, Stream Ecology, Ed.2, Ch.8"
+  },
+
+  // ── EKOLOGI HEWAN (BI3024) ───────────────────────────
+  {
+    chapter: "Ekologi Hewan · BI3024",
+    chapterClass: "rose",
+    question: "Kurva survivorship Tipe I (manusia, gajah) menunjukkan bahwa...",
+    A: "Mortalitas tinggi terjadi di usia tua — sebagian besar individu bertahan hingga usia lanjut",
+    B: "Mortalitas konstan di setiap usia — kematian terjadi secara acak sepanjang hidup",
+    correct: "A",
+    explanation: "Ada tiga tipe kurva kelangsungan hidup: <strong>Tipe I</strong> (cembung) — kebanyakan individu hidup lama, mortalitas naik di usia tua (K-strategist: manusia, mamalia besar). <strong>Tipe II</strong> (diagonal) — mortalitas konstan (burung, beberapa reptil). <strong>Tipe III</strong> (cekung) — mortalitas sangat tinggi di awal kehidupan (ikan, tanaman).",
+    latin: "",
+    ref: "Krebs, Ecology, Ed.6, Ch.11"
+  },
+
+  // ── BIOLOGI LAUT (BI3027) ────────────────────────────
+  {
+    chapter: "Biologi Laut · BI3027",
+    chapterClass: "sky",
+    question: "Zona laut yang menerima cukup cahaya untuk fotosintesis dan memiliki produktivitas primer tertinggi disebut...",
+    A: "Zona eufotik (photic zone / epipelagic)",
+    B: "Zona batipelagik (bathypelagic zone)",
+    correct: "A",
+    explanation: "<strong>Zona eufotik</strong> (0–200 m) mendapat cukup cahaya untuk fotosintesis fitoplankton — inilah zona produksi primer lautan. Di bawahnya: zona disfotik (200–1000 m, cahaya minim), kemudian <em>zona afotik</em> (>1000 m, tidak ada cahaya). Zona batipelagik (1000–4000 m) adalah zona gelap total tanpa fotosintesis.",
+    latin: "",
+    ref: "Castro & Huber, Marine Biology, Ed.10, Ch.5"
+  },
+
+  // ── ENTOMOLOGI (BI3052) ──────────────────────────────
+  {
+    chapter: "Entomologi · BI3052",
+    chapterClass: "amber",
+    question: "Serangga (Insecta) dibedakan dari Arachnida (laba-laba) berdasarkan...",
+    A: "Jumlah kaki: Insecta 3 pasang (6 kaki), Arachnida 4 pasang (8 kaki)",
+    B: "Insecta memiliki eksoskeleton, sedangkan Arachnida tidak",
+    correct: "A",
+    explanation: "<strong>Insecta</strong>: 3 pasang kaki (6 kaki), tubuh 3 tagma (kepala, toraks, abdomen), umumnya bersayap. <strong>Arachnida</strong>: 4 pasang kaki (8 kaki), tubuh 2 tagma (sefalotoraks, abdomen), tidak bersayap. Keduanya sama-sama memiliki eksoskeleton kitin sebagai Arthropoda.",
+    latin: "Insecta vs Arachnida",
+    ref: "Borror et al., Introduction to the Study of Insects, Ed.7, Ch.1"
+  },
+
+  // ── MAMOLOGI (BI3053) ────────────────────────────────
+  {
+    chapter: "Mamologi · BI3053",
+    chapterClass: "amber",
+    question: "Ciri khas yang membedakan Mamalia dari semua vertebrata lain adalah...",
+    A: "Memiliki rambut/bulu dan kelenjar susu (mammary glands) untuk menyusui anaknya",
+    B: "Berdarah panas (endoterm) dan memiliki empat ruang jantung",
+    correct: "A",
+    explanation: "Ciri <em>synapomorfi</em> Mammalia yang paling khas adalah: (1) <strong>rambut</strong> (pada semua tahap hidup), (2) <strong>kelenjar susu</strong> (mammary glands) yang menghasilkan susu untuk menyusui anak. Berdarah panas dan empat ruang jantung juga dimiliki burung, sehingga bukan ciri eksklusif mamalia.",
+    latin: "Mammalia",
+    ref: "Feldhamer et al., Mammalogy, Ed.4, Ch.1"
+  },
+
+  // ── IMUNOLOGI (BI3054) ───────────────────────────────
+  {
+    chapter: "Imunologi · BI3054",
+    chapterClass: "purple",
+    question: "Perbedaan utama antara imunitas bawaan (innate) dan imunitas adaptif (adaptive) adalah...",
+    A: "Imunitas adaptif bersifat spesifik terhadap antigen dan memiliki memori imunologis; innate tidak spesifik",
+    B: "Imunitas bawaan hanya dimiliki vertebrata, sedangkan adaptif dimiliki semua hewan",
+    correct: "A",
+    explanation: "<strong>Imunitas bawaan</strong>: respon cepat (<jam), tidak spesifik antigen, tidak ada memori — contoh: fagosit, sel NK, komplemen. <strong>Imunitas adaptif</strong>: respon lambat (hari–minggu), <em>sangat spesifik</em> terhadap epitop antigen tertentu, membentuk sel memori (dasar vaksinasi) — contoh: limfosit B (antibodi) dan T. Imunitas bawaan dimiliki semua hewan, bahkan tumbuhan.",
+    latin: "",
+    ref: "Abbas, Cellular and Molecular Immunology, Ed.10, Ch.1"
+  },
+
+  // ── TERATOLOGI (BI3055) ──────────────────────────────
+  {
+    chapter: "Teratologi · BI3055",
+    chapterClass: "rose",
+    question: "Teratogen adalah agen yang menyebabkan cacat lahir. Periode paling rentan terhadap teratogen pada embrio manusia adalah...",
+    A: "Periode organogenesis (minggu ke-3 hingga ke-8 kehamilan)",
+    B: "Trimester ketiga kehamilan (bulan 7–9)",
+    correct: "A",
+    explanation: "<strong>Organogenesis</strong> (minggu 3–8) adalah periode kritis di mana organ-organ utama (jantung, otak, anggota tubuh) terbentuk. Paparan teratogen (alkohol, talidomid, infeksi rubella, radiasi) pada periode ini berisiko tinggi menyebabkan malformasi berat. Trimester ketiga lebih berdampak pada pertumbuhan dan fungsi organ yang sudah terbentuk.",
+    latin: "",
+    ref: "Sadler, Langman's Medical Embryology, Ed.14, Ch.8"
+  },
+
+  // ── HISTOLOGI (BI3056) ───────────────────────────────
+  {
+    chapter: "Histologi · BI3056",
+    chapterClass: "sky",
+    question: "Jaringan epitel yang melapisi pembuluh darah dan jantung disebut...",
+    A: "Endotelium — epitel pipih selapis (simple squamous epithelium)",
+    B: "Mesotelium — epitel kolumnar berlapis semu",
+    correct: "A",
+    explanation: "<strong>Endotelium</strong> adalah epitel pipih selapis yang melapisi interior pembuluh darah, limfatik, dan jantung. Bentuknya yang tipis dan datar memfasilitasi pertukaran zat dan gas secara difusi. <em>Mesotelium</em> adalah epitel pipih selapis yang melapisi rongga tubuh (pleura, peritoneum, perikardium) — berbeda lokasi.",
+    latin: "",
+    ref: "Ross & Pawlina, Histology: A Text and Atlas, Ed.8, Ch.4"
+  },
+
+  // ── BIOSISTEMATIKA HEWAN (BI3057) ────────────────────
+  {
+    chapter: "Biosistematika Hewan · BI3057",
+    chapterClass: "amber",
+    question: "Dalam sistem klasifikasi filogenetik (kladistik), kelompok yang mencakup nenek moyang bersama dan SEMUA keturunannya disebut...",
+    A: "Klad (clade) atau kelompok monofiletik",
+    B: "Kelompok parafiletik",
+    correct: "A",
+    explanation: "<strong>Klad/Monofiletik</strong>: nenek moyang + semua keturunan (contoh: Aves termasuk dinosaur). <strong>Parafiletik</strong>: nenek moyang + sebagian keturunan, tidak semua (contoh: 'Reptilia' tradisional yang mengecualikan burung). <strong>Polifiletik</strong>: kelompok dari beberapa nenek moyang berbeda. Sistematika modern mengutamakan kelompok monofiletik.",
+    latin: "",
+    ref: "Futuyma, Evolution, Ed.4, Ch.2"
+  },
+
+  // ── BIOSISTEMATIKA TUMBUHAN (BI3058) ─────────────────
+  {
+    chapter: "Biosistematika Tumbuhan · BI3058",
+    chapterClass: "amber",
+    question: "Sistem klasifikasi tumbuhan modern yang berdasarkan analisis filogenetik molekuler (gen rbcL, matK) adalah...",
+    A: "Sistem APG (Angiosperm Phylogeny Group)",
+    B: "Sistem Cronquist yang berdasarkan morfologi saja",
+    correct: "A",
+    explanation: "<strong>APG IV (2016)</strong> adalah sistem klasifikasi tumbuhan berbunga terkini berdasarkan filogenetik molekuler multi-gen. Banyak mengubah pengelompokan tradisional — contoh: Scrophulariaceae dipecah, Asparagaceae diperluas. Sistem <em>Cronquist (1981)</em> hanya berbasis morfologi dan kini banyak yang tidak mencerminkan hubungan evolusioner sesungguhnya.",
+    latin: "",
+    ref: "APG IV, Botanical Journal of the Linnean Society, 2016"
+  },
+
+  // ── FITOHORMON (BI4017) ──────────────────────────────
+  {
+    chapter: "Fitohormon · BI4017",
+    chapterClass: "amber",
+    question: "Fitohormon yang berperan dalam respons stres kekeringan dengan menutup stomata adalah...",
+    A: "Asam absisat (ABA — Abscisic Acid)",
+    B: "Sitokinin",
+    correct: "A",
+    explanation: "<strong>ABA</strong> disintesis di kloroplas dan akar saat tanaman mengalami defisit air. ABA berikatan dengan reseptor PYR/PYL di sel penjaga → mengaktifkan kaskade sinyal → menutup kanal K⁺ masuk dan membuka kanal K⁺ keluar → sel penjaga kehilangan turgor → stomata menutup, mencegah kehilangan air (transpirasi). Sitokinin justru mendorong pembukaan stomata.",
+    latin: "Abscisic Acid",
+    ref: "Taiz & Zeiger, Plant Physiology, Ed.6, Ch.25"
+  },
+
+  // ── EKOLOGI TERESTRIAL (BI4029) ──────────────────────
+  {
+    chapter: "Ekologi Terestrial · BI4029",
+    chapterClass: "rose",
+    question: "Bioma hutan hujan tropis memiliki keanekaragaman spesies tertinggi di dunia. Faktor utama yang mendorong keanekaragaman tinggi ini adalah...",
+    A: "Produktivitas tinggi, iklim stabil sepanjang tahun, dan kompleksitas struktural habitat vertikal",
+    B: "Suhu tinggi saja yang mempercepat laju evolusi spesies baru",
+    correct: "A",
+    explanation: "Tiga faktor utama keanekaragaman hutan hujan tropis: (1) <strong>Produktivitas primer tinggi</strong> → lebih banyak energi tersedia untuk lebih banyak spesies. (2) <strong>Stabilitas iklim</strong> selama jutaan tahun → memungkinkan spesialisasi ekstrem. (3) <strong>Stratifikasi vertikal</strong> (lantai hutan, understory, kanopi, emergent) → menciptakan banyak relung ekologi berbeda.",
+    latin: "",
+    ref: "Ricklefs, The Economy of Nature, Ed.7, Ch.20"
+  },
+
+  // ── ENDOKRINOLOGI (BI4041) ───────────────────────────
+  {
+    chapter: "Endokrinologi · BI4041",
+    chapterClass: "purple",
+    question: "Sumbu HPA (Hypothalamus-Pituitary-Adrenal) diaktifkan saat stres. Urutan sinyal yang benar adalah...",
+    A: "Hipotalamus (CRH) → Hipofisis anterior (ACTH) → Korteks adrenal (Kortisol)",
+    B: "Hipofisis posterior (ADH) → Hipotalamus (CRH) → Medula adrenal (Epinefrin)",
+    correct: "A",
+    explanation: "Sumbu <strong>HPA</strong>: (1) Hipotalamus melepas <em>CRH (Corticotropin-Releasing Hormone)</em> → (2) Hipofisis anterior melepas <em>ACTH (Adrenocorticotropic Hormone)</em> → (3) Korteks adrenal mensekresikan <em>kortisol</em>. Kortisol (glukokortikoid) memobilisasi energi, menekan imun, dan melalui umpan balik negatif menghambat hipotalamus & hipofisis.",
+    latin: "",
+    ref: "Silverthorn, Human Physiology, Ed.8, Ch.23"
+  },
+
+  // ── FISIOLOGI MANUSIA (BI4053) ───────────────────────
+  {
+    chapter: "Fisiologi Manusia · BI4053",
+    chapterClass: "purple",
+    question: "Proses filtrasi di glomerulus ginjal terjadi karena...",
+    A: "Tekanan hidrostatik darah di kapiler glomerulus lebih besar dari tekanan osmotik plasma",
+    B: "Sel podosit aktif memompa zat terlarut keluar dari darah menggunakan ATP",
+    correct: "A",
+    explanation: "<strong>Filtrasi glomerulus</strong> adalah proses pasif: tekanan darah di kapiler glomerulus (~55 mmHg) mendorong cairan dan zat terlarut kecil keluar ke kapsul Bowman. Ini dilawan oleh tekanan osmotik koloid plasma (~30 mmHg) dan tekanan kapsul (~15 mmHg). Laju filtrasi glomerulus (GFR) normal: <em>~125 mL/menit</em> atau ~180 L/hari.",
+    latin: "",
+    ref: "Silverthorn, Human Physiology, Ed.8, Ch.19"
+  },
+
+  // ── TOKSIKOLOGI DASAR (BI4055) ───────────────────────
+  {
+    chapter: "Toksikologi Dasar · BI4055",
+    chapterClass: "rose",
+    question: "Prinsip dasar toksikologi yang diungkapkan Paracelsus (abad 16) dan masih relevan hingga kini adalah...",
+    A: "\"Dosis yang membuat racun\" — semua zat bisa racun, tergantung dosis",
+    B: "Zat alami selalu aman dan tidak pernah bersifat racun bagi manusia",
+    correct: "A",
+    explanation: "Paracelsus: <em>\"Sola dosis facit venenum\"</em> — hanya dosis yang menjadikan suatu zat racun. Air pun bisa mematikan bila dikonsumsi berlebihan (hiponatremia). Dalam toksikologi modern, ini diwujudkan dalam konsep <strong>LD₅₀</strong> (dosis letal untuk 50% populasi uji) dan kurva dosis-respons. Banyak zat 'alami' sangat toksik (ricin, aflatoksin, botulinum toxin).",
+    latin: "",
+    ref: "Klaassen, Casarett & Doull's Toxicology, Ed.9, Ch.1"
+  },
+
+  // ── BIOLOGI FORENSIK (BI4023) ────────────────────────
+  {
+    chapter: "Biologi Forensik · BI4023",
+    chapterClass: "sky",
+    question: "Teknik forensik yang menggunakan pola pengulangan basa DNA pendek (STR) untuk identifikasi individu disebut...",
+    A: "DNA profiling / DNA fingerprinting menggunakan analisis STR (Short Tandem Repeat)",
+    B: "PCR konvensional untuk mendeteksi bakteri patogen",
+    correct: "A",
+    explanation: "<strong>STR analysis</strong> (Short Tandem Repeat) adalah standar emas forensik DNA: membandingkan panjang pengulangan sekuens di 13–20 lokus STR tertentu. Kombinasi profil STR seseorang sangat unik — probabilitas kesamaan dua individu tak berhubungan: <em>~1 dalam 1 kuintilion</em>. Database CODIS (AS) menggunakan 20 lokus STR standar.",
+    latin: "",
+    ref: "Butler, Fundamentals of Forensic DNA Typing, Ch.6"
+  },
+
+  // ── EKOLOGI TUMBUHAN (BI4030) ────────────────────────
+  {
+    chapter: "Ekologi Tumbuhan · BI4030",
+    chapterClass: "amber",
+    question: "Tumbuhan epifit (seperti anggrek) mendapatkan nutrisi dari...",
+    A: "Udara, air hujan, dan sisa organik yang menempel di permukaan inangnya — bukan parasit",
+    B: "Menyerap sari-sari makanan langsung dari jaringan pembuluh tumbuhan inang",
+    correct: "A",
+    explanation: "<strong>Epifit</strong> tumbuh di permukaan tumbuhan lain hanya sebagai tempat bertumpu, <em>bukan parasit</em> — tidak mengambil nutrisi dari inang. Nutrisinya berasal dari: air hujan, debu mineral udara, dan dekomposisi bahan organik di ceruk batang/cabang. Berbeda dengan <strong>parasit</strong> sejati (tali putri/Cuscuta) yang menyedot nutrisi dari pembuluh floem inang.",
+    latin: "",
+    ref: "Lambers et al., Plant Physiological Ecology, Ed.2, Ch.9"
+  },
+];
+
+// ═══════════════════════════════════════════════════════
+//  GAME STATE & LOGIC
+// ═══════════════════════════════════════════════════════
+let queue = [];
+let wrongItems = [];
+let currentIdx = 0;
+let stats = { correct: 0, wrong: 0 };
+let totalCards = 0;
+let canClick = false;
+
+function shuffleArray(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
+function initGame(cardSet) {
+  queue = shuffleArray(cardSet);
+  wrongItems = [];
+  currentIdx = 0;
+  stats = { correct: 0, wrong: 0 };
+  totalCards = queue.length;
+  document.getElementById('game-ui').style.display = 'flex';
+  document.getElementById('result-screen').style.display = 'none';
+  renderCard();
+}
+
+function renderCard() {
+  if (queue.length === 0) { showResult(); return; }
+
+  canClick = false;
+  const q = queue[currentIdx];
+
+  // Chapter tag
+  const tag = document.getElementById('chapter-tag');
+  tag.textContent = q.chapter;
+  tag.className = 'chapter-tag' + (q.chapterClass ? ' ' + q.chapterClass : '');
+
+  // Card number
+  document.getElementById('card-number').textContent =
+    `Kartu #${String(totalCards - queue.length + currentIdx + 1).padStart(3,'0')} · ${queue.length} tersisa`;
+
+  // Question
+  document.getElementById('question-text').textContent = q.question;
+  document.getElementById('latin-name').textContent = q.latin ? q.latin : '';
+
+  // Options (randomize A/B order)
+  const swap = Math.random() < 0.5;
+  const btnA = document.getElementById('optA');
+  const btnB = document.getElementById('optB');
+  document.getElementById('textA').textContent = swap ? q.B : q.A;
+  document.getElementById('textB').textContent = swap ? q.A : q.B;
+  btnA.dataset.value = swap ? 'B' : 'A';
+  btnB.dataset.value = swap ? 'A' : 'B';
+
+  // Reset buttons
+  [btnA, btnB].forEach(b => {
+    b.className = 'opt-btn';
+    b.disabled = false;
+  });
+
+  // Hide feedback
+  document.getElementById('feedback-card').style.display = 'none';
+  document.getElementById('fb-retry').style.display = 'none';
+
+  // Progress
+  const mastered = totalCards - queue.length;
+  const pct = Math.round((mastered / totalCards) * 100);
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = `Dikuasai: ${mastered}/${totalCards}`;
+  document.getElementById('prog-pct').textContent = pct + '%';
+
+  // Stats
+  document.getElementById('sc-benar').textContent = stats.correct;
+  document.getElementById('sc-salah').textContent = stats.wrong;
+  document.getElementById('sc-sisa').textContent = queue.length;
+
+  setTimeout(() => { canClick = true; }, 200);
+}
+
+function handleChoice(btnId) {
+  if (!canClick) return;
+  canClick = false;
+
+  const btn = document.getElementById(btnId);
+  const choice = btn.dataset.value;
+  const q = queue[currentIdx];
+  const isCorrect = choice === q.correct;
+
+  const btnA = document.getElementById('optA');
+  const btnB = document.getElementById('optB');
+  [btnA, btnB].forEach(b => b.disabled = true);
+
+  // Highlight
+  if (isCorrect) {
+    btn.classList.add('correct');
+    stats.correct++;
+    sfxCorrect();
+  } else {
+    btn.classList.add('wrong');
+    stats.wrong++;
+    sfxWrong();
+    // Highlight correct
+    [btnA, btnB].forEach(b => {
+      if (b.dataset.value === q.correct) b.classList.add('correct');
+    });
+  }
+
+  // Feedback card
+  const fbCard = document.getElementById('feedback-card');
+  const fbStatus = document.getElementById('fb-status');
+  const fbExp = document.getElementById('fb-explanation');
+  const fbRef = document.getElementById('fb-ref');
+  const fbRetry = document.getElementById('fb-retry');
+
+  fbStatus.textContent = isCorrect ? 'BENAR!' : 'SALAH';
+  fbStatus.className = 'feedback-status ' + (isCorrect ? 'ok' : 'err');
+  fbExp.innerHTML = q.explanation;
+  fbRef.textContent = q.ref || '';
+  fbRetry.style.display = isCorrect ? 'none' : 'flex';
+  fbCard.style.display = 'block';
+
+  // Update stats display
+  document.getElementById('sc-benar').textContent = stats.correct;
+  document.getElementById('sc-salah').textContent = stats.wrong;
+
+  // Show next button — user controls when to proceed
+  document.getElementById('next-btn').style.display = 'block';
+  document.getElementById('next-btn').dataset.correct = isCorrect ? '1' : '0';
+}
+
+function goNext() {
+  const btn = document.getElementById('next-btn');
+  const isCorrect = btn.dataset.correct === '1';
+  const q = queue[currentIdx];
+  btn.style.display = 'none';
+  if (isCorrect) {
+    queue.splice(currentIdx, 1);
+    wrongItems = wrongItems.filter(x => x !== q);
+  } else {
+    if (!wrongItems.includes(q)) wrongItems.push(q);
+    const removed = queue.splice(currentIdx, 1)[0];
+    queue.push(removed);
+  }
+  if (currentIdx >= queue.length) currentIdx = 0;
+  renderCard();
+}
+
+// Bind buttons
+document.getElementById('optA').onclick = () => handleChoice('optA');
+document.getElementById('optB').onclick = () => handleChoice('optB');
+
+function showResult() {
+  document.getElementById('game-ui').style.display = 'none';
+  document.getElementById('result-screen').style.display = 'block';
+  stopMusic();
+  if (akurasi >= 90) sfxFanfare();
+
+  const total = stats.correct + stats.wrong;
+  const akurasi = total > 0 ? Math.round((stats.correct / total) * 100) : 0;
+
+  // Grade
+  let grade, gradeColor, title, sub;
+  if (akurasi >= 90) {
+    grade = 'A'; gradeColor = '#4ade80';
+    title = 'Luar Biasa!';
+    sub = 'Penguasaan materi sangat baik. Pertahankan konsistensinya!';
+  } else if (akurasi >= 75) {
+    grade = 'B'; gradeColor = '#a78bfa';
+    title = 'Bagus!';
+    sub = 'Hampir sempurna. Tinjau ulang beberapa konsep yang masih keliru.';
+  } else if (akurasi >= 60) {
+    grade = 'C'; gradeColor = '#fbbf24';
+    title = 'Terus Berlatih!';
+    sub = 'Fondasi sudah ada, tapi beberapa topik perlu dipelajari ulang.';
+  } else {
+    grade = 'D'; gradeColor = '#f87171';
+    title = 'Jangan Menyerah!';
+    sub = 'Ulangi materi dari referensi buku teksnya, lalu coba lagi.';
+  }
+
+  document.getElementById('res-grade').textContent = grade;
+  document.getElementById('res-grade').style.color = gradeColor;
+  document.getElementById('res-title').textContent = title;
+  document.getElementById('res-sub').textContent = sub;
+  document.getElementById('res-benar').textContent = stats.correct;
+  document.getElementById('res-salah').textContent = stats.wrong;
+  document.getElementById('res-akurasi').textContent = akurasi + '%';
+
+  // Pills
+  const pillsWrap = document.getElementById('pills-wrap');
+  pillsWrap.innerHTML = '';
+  DATABASE.forEach(card => {
+    const isWrong = wrongItems.includes(card);
+    const pill = document.createElement('span');
+    pill.className = 'pill ' + (isWrong ? 'err' : 'ok');
+    pill.textContent = card.A === card.A ? card.question.split(' ').slice(0,4).join(' ') + '…' : '';
+    pill.title = card.question;
+    pillsWrap.appendChild(pill);
+  });
+
+  const actionSec = document.querySelector('.action-secondary');
+  actionSec.style.display = wrongItems.length > 0 ? 'block' : 'none';
+}
+
+function restartGame() { initGame(DATABASE); }
+function restartWrong() {
+  if (wrongItems.length > 0) initGame(wrongItems);
+  else initGame(DATABASE);
+}
+
+// ═══════════════════════════════════════════════════════
+//  AUDIO ENGINE — Web Audio API (no external files)
+// ═══════════════════════════════════════════════════════
+let audioCtx = null;
+let musicGain = null;
+let sfxGain = null;
+let musicNodes = [];
+let musicOn = false;
+let sfxMuted = false;
+let musicInterval = null;
+
+function getCtx() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    musicGain = audioCtx.createGain(); musicGain.gain.value = 0.18; musicGain.connect(audioCtx.destination);
+    sfxGain = audioCtx.createGain(); sfxGain.gain.value = 0.7; sfxGain.connect(audioCtx.destination);
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function playTone(freq, type, dur, gainNode, startGain, endGain, startTime) {
+  const ctx = getCtx();
+  const osc = ctx.createOscillator();
+  const g = ctx.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, startTime);
+  g.gain.setValueAtTime(startGain, startTime);
+  g.gain.exponentialRampToValueAtTime(endGain, startTime + dur);
+  osc.connect(g); g.connect(gainNode || sfxGain);
+  osc.start(startTime); osc.stop(startTime + dur);
+  return osc;
+}
+
+// ✅ TING — benar: chord manis naik
+function sfxCorrect() {
+  if (sfxMuted) return;
+  const ctx = getCtx(); const t = ctx.currentTime;
+  [[523,0],[659,0.06],[784,0.12],[1047,0.22]].forEach(([f,d]) => playTone(f,'sine',0.35,sfxGain,0.5,0.001,t+d));
+}
+
+// ❌ TETOT — salah: suara lucu turun dramatis
+function sfxWrong() {
+  if (sfxMuted) return;
+  const ctx = getCtx(); const t = ctx.currentTime;
+  // "te-tot" dua nada rendah
+  const osc1 = ctx.createOscillator(); const g1 = ctx.createGain();
+  osc1.type = 'sawtooth'; osc1.frequency.setValueAtTime(280, t); osc1.frequency.exponentialRampToValueAtTime(120, t+0.25);
+  g1.gain.setValueAtTime(0.7, t); g1.gain.exponentialRampToValueAtTime(0.001, t+0.28);
+  osc1.connect(g1); g1.connect(sfxGain); osc1.start(t); osc1.stop(t+0.3);
+
+  const osc2 = ctx.createOscillator(); const g2 = ctx.createGain();
+  osc2.type = 'sawtooth'; osc2.frequency.setValueAtTime(220, t+0.35); osc2.frequency.exponentialRampToValueAtTime(80, t+0.65);
+  g2.gain.setValueAtTime(0.7, t+0.35); g2.gain.exponentialRampToValueAtTime(0.001, t+0.7);
+  osc2.connect(g2); g2.connect(sfxGain); osc2.start(t+0.35); osc2.stop(t+0.75);
+
+  // vibrato lucu di akhir
+  const osc3 = ctx.createOscillator(); const g3 = ctx.createGain();
+  osc3.type = 'square'; osc3.frequency.setValueAtTime(100, t+0.8);
+  const lfo = ctx.createOscillator(); const lfoG = ctx.createGain();
+  lfo.frequency.value = 12; lfoG.gain.value = 30;
+  lfo.connect(lfoG); lfoG.connect(osc3.frequency);
+  g3.gain.setValueAtTime(0.3, t+0.8); g3.gain.exponentialRampToValueAtTime(0.001, t+1.1);
+  osc3.connect(g3); g3.connect(sfxGain);
+  lfo.start(t+0.8); osc3.start(t+0.8); osc3.stop(t+1.15); lfo.stop(t+1.15);
+}
+
+// 🎉 FANFARE — hasil sempurna
+function sfxFanfare() {
+  if (sfxMuted) return;
+  const ctx = getCtx(); const t = ctx.currentTime;
+  const melody = [[523,0],[659,0.15],[784,0.3],[1047,0.45],[784,0.65],[1047,0.8]];
+  melody.forEach(([f,d]) => playTone(f,'sine',0.3,sfxGain,0.6,0.001,t+d));
+}
+
+// 🎵 BACKGROUND MUSIC — lo-fi study vibes (generatif)
+const SCALE = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88]; // C major
+const BASS  = [130.81, 146.83, 164.81, 174.61, 196.00];
+
+function playMusicNote() {
+  if (!musicOn) return;
+  const ctx = getCtx(); const t = ctx.currentTime;
+  // Melodi
+  const freq = SCALE[Math.floor(Math.random() * SCALE.length)] * (Math.random() < 0.3 ? 2 : 1);
+  const osc = ctx.createOscillator(); const g = ctx.createGain();
+  osc.type = 'sine'; osc.frequency.value = freq;
+  const dur = [0.3,0.4,0.6,0.8][Math.floor(Math.random()*4)];
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.12, t+0.05);
+  g.gain.exponentialRampToValueAtTime(0.001, t+dur);
+  osc.connect(g); g.connect(musicGain); osc.start(t); osc.stop(t+dur+0.05);
+  // Bass sesekali
+  if (Math.random() < 0.35) {
+    const bf = BASS[Math.floor(Math.random()*BASS.length)];
+    const bo = ctx.createOscillator(); const bg = ctx.createGain();
+    bo.type = 'triangle'; bo.frequency.value = bf;
+    bg.gain.setValueAtTime(0.18, t); bg.gain.exponentialRampToValueAtTime(0.001, t+0.5);
+    bo.connect(bg); bg.connect(musicGain); bo.start(t); bo.stop(t+0.55);
+  }
+}
+
+function startMusic() {
+  if (musicInterval) clearInterval(musicInterval);
+  musicInterval = setInterval(playMusicNote, 450);
+  playMusicNote();
+}
+function stopMusic() { if (musicInterval) { clearInterval(musicInterval); musicInterval = null; } }
+
+function toggleMusic() {
+  getCtx();
+  musicOn = !musicOn;
+  const btn = document.getElementById('music-btn');
+  if (musicOn) { startMusic(); btn.style.color='var(--accent)'; btn.style.borderColor='var(--accent)'; }
+  else { stopMusic(); btn.style.color='var(--text-muted)'; btn.style.borderColor='var(--border-strong)'; }
+}
+
+function toggleMute() {
+  sfxMuted = !sfxMuted;
+  const btn = document.getElementById('mute-btn');
+  btn.textContent = sfxMuted ? '🔇 SFX' : '🔊 SFX';
+  btn.style.color = sfxMuted ? 'var(--wrong)' : 'var(--text-muted)';
+}
+
+// Start
+initGame(DATABASE);
+</script>
+</body>
+</html>
